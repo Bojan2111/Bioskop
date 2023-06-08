@@ -22,5 +22,6 @@ namespace Bioskop.Models
         [Required]
         public int AdministratorId { get; set; }
         public Korisnik Administrator { get; set; }
+        public bool Obrisana { get; set; } = false;
     }
 }

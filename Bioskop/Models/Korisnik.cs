@@ -14,5 +14,6 @@ namespace Bioskop.Models
         public DateTime DatumRegistracije { get; set; }
         [Required]
         public string Uloga { get; set; }
+        public bool Obrisan { get; set; } = false;
     }
 }

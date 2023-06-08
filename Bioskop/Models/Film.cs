@@ -21,5 +21,6 @@ namespace Bioskop.Models
         [Range(1888, 2100)]
         public int GodinaProizvodnje { get; set; }
         public string Opis { get; set; }
+        public bool Obrisan { get; set; } = false;
     }
 }
