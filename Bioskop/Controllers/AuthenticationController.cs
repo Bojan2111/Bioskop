@@ -63,6 +63,61 @@ namespace Bioskop.Controllers
             return Unauthorized();
         }
 
+        //[HttpPost]
+        //[Route("register")]
+        //public IActionResult Register([FromBody] RegistrationDTO model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest("Registration parameters invalid.");
+        //    }
+
+        //    var userExists = userManager.FindByNameAsync(model.Username).GetAwaiter().GetResult();
+        //    if (userExists != null)
+        //    {
+        //        return BadRequest("User already exists");
+        //    }
+
+        //    ApplicationUser user;
+        //    if (/* Check if the user is an administrator based on your app's logic */)
+        //    {
+        //        user = new ApplicationUser
+        //        {
+        //            //Email = model.Email,
+        //            SecurityStamp = Guid.NewGuid().ToString(),
+        //            UserName = model.Username
+        //        };
+
+        //        var result = userManager.CreateAsync(user, model.Password).GetAwaiter().GetResult();
+        //        if (!result.Succeeded)
+        //        {
+        //            return BadRequest("Validation failed! Please check user details and try again.");
+        //        }
+
+        //        userManager.AddToRoleAsync(user, "Administrator").GetAwaiter().GetResult();
+        //    }
+        //    else
+        //    {
+        //        user = new ApplicationUser
+        //        {
+        //            //Email = model.Email,
+        //            SecurityStamp = Guid.NewGuid().ToString(),
+        //            UserName = model.Username,
+        //            DatumRegistracije = DateTime.Now // Set the registration date here
+        //        };
+
+        //        var result = userManager.CreateAsync(user, model.Password).GetAwaiter().GetResult();
+        //        if (!result.Succeeded)
+        //        {
+        //            return BadRequest("Validation failed! Please check user details and try again.");
+        //        }
+
+        //        userManager.AddToRoleAsync(user, "RegularUser").GetAwaiter().GetResult();
+        //    }
+
+        //    return Ok();
+        //}
+
         [HttpPost]
         [Route("register")]
         public IActionResult Register([FromBody] RegistrationDTO model)
@@ -80,9 +135,9 @@ namespace Bioskop.Controllers
 
             ApplicationUser user = new ApplicationUser()
             {
-                Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
+                UserName = model.Username,
+                DatumRegistracije = model.RegistrationDate
             };
             var result = userManager.CreateAsync(user, model.Password).GetAwaiter().GetResult();
             if (!result.Succeeded)

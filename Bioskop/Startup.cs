@@ -1,3 +1,5 @@
+using Bioskop.Models;
+using Bioskop.Models.Login;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,13 +34,13 @@ namespace Bioskop
         public void ConfigureServices(IServiceCollection services)
         {
             // For Entity Framework  - uncomment when AppDbContext class is created
-            //services.AddDbContext<AppDbContext>(options =>
-            //        options.UseSqlServer(ConfigurationExtensions.GetConnectionString(Configuration, "AppConnectionString")));
+            services.AddDbContext<AppDbContext>(options =>
+                    options.UseSqlServer(ConfigurationExtensions.GetConnectionString(Configuration, "AppConnectionString")));
 
             // For Identity  
-            //services.AddIdentity<ApplicationUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<AppDbContext>()
-            //    .AddDefaultTokenProviders();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
             // Adding Authentication  
             services.AddAuthentication(options =>
