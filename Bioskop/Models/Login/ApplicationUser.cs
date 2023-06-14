@@ -5,6 +5,6 @@ namespace Bioskop.Models.Login
 {
     public class ApplicationUser : IdentityUser
     {
-        public DateTime DatumRegistracije { get; set; }
+        public DateTime RegistrationDate { get; set; }
     }
 }

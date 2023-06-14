@@ -1,7 +1,9 @@
 ﻿using Bioskop.Models.Login;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Reflection.Emit;
 
 namespace Bioskop.Models
 {
@@ -284,6 +286,12 @@ namespace Bioskop.Models
                     KorisnikId = 3,
                 }
             );
+
+            builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
+            builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
+            builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
+            builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
+            builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
 
             base.OnModelCreating(builder);
         }
