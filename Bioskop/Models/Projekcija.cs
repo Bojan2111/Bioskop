@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bioskop.Models.Login;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Bioskop.Models
@@ -20,8 +21,8 @@ namespace Bioskop.Models
         [Required]
         public decimal CenaKarte { get; set; }
         [Required]
-        public int AdministratorId { get; set; }
-        public Korisnik Administrator { get; set; }
+        public string AdministratorId { get; set; }
+        public ApplicationUser Admin { get; set; }
         public bool Obrisana { get; set; } = false;
     }
 }

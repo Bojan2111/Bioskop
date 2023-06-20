@@ -87,7 +87,7 @@ namespace Bioskop
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -100,6 +100,7 @@ namespace Bioskop
 
             app.UseRouting();
             app.UseCors();
+            CreateRoles(roleManager).GetAwaiter().GetResult();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -108,6 +109,20 @@ namespace Bioskop
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private async Task CreateRoles(RoleManager<IdentityRole> roleManager)
+        {
+            var roles = new List<string> { "Admin", "Korisnik" };
+
+            foreach (var role in roles)
+            {
+                var roleExists = await roleManager.RoleExistsAsync(role);
+                if (!roleExists)
+                {
+                    await roleManager.CreateAsync(new IdentityRole(role));
+                }
+            }
         }
     }
 }

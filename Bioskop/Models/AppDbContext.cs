@@ -12,7 +12,6 @@ namespace Bioskop.Models
         public DbSet<TipProjekcije> TipoviProjekcije { get; set; }
         public DbSet<Sala> Sale { get; set; }
         public DbSet<Sediste> Sedista { get; set; }
-        public DbSet<Korisnik> Korisnici { get; set; }
         public DbSet<Film> Filmovi { get; set; }
         public DbSet<Projekcija> Projekcije { get; set; }
         public DbSet<Karta> Karte { get; set; }
@@ -20,6 +19,49 @@ namespace Bioskop.Models
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
+            builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
+            builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
+            builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
+            builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
+            builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
+
+            var adminUser = new ApplicationUser
+            {
+                UserName = "admin",
+                Email = "admin@example.com",
+                RegistrationDate = new DateTime(2023, 3, 28),
+                EmailConfirmed = true
+            };
+
+            var user1 = new ApplicationUser
+            {
+                UserName = "korisnik1",
+                Email = "korisnik1@test.com",
+                RegistrationDate = new DateTime(2023, 4, 23),
+                EmailConfirmed = true
+            };
+
+            var user2 = new ApplicationUser
+            {
+                UserName = "korisnik2",
+                Email = "korisnik2@test.com",
+                RegistrationDate = new DateTime(2023, 5, 17),
+                EmailConfirmed = true
+            };
+
+            var passwordHasher = new PasswordHasher<ApplicationUser>();
+            adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, "Qwe-123");
+            user1.PasswordHash = passwordHasher.HashPassword(user1, "Asdf-1234");
+            user2.PasswordHash = passwordHasher.HashPassword(user2, "Zxc-987");
+
+            builder.Entity<ApplicationUser>(entity =>
+            {
+                entity.Property(u => u.ProfileImage).HasMaxLength(255);
+                entity.HasData(adminUser, user1, user2);
+            });
+
+
             builder.Entity<TipProjekcije>().HasData(
                 new TipProjekcije() { Id = 1, Naziv = "2D" },
                 new TipProjekcije() { Id = 2, Naziv = "3D" },
@@ -27,9 +69,9 @@ namespace Bioskop.Models
             );
             
             builder.Entity<Sala>().HasData(
-                new Sala() { Id = 1, Naziv = "Mala sala - 3D i 4D" },
-                new Sala() { Id = 2, Naziv = "Velika sala - 2D i 3D" },
-                new Sala() { Id = 3, Naziv = "Ultimate sala - sve" }
+                new Sala() { Id = 1, Naziv = "Mala sala" },
+                new Sala() { Id = 2, Naziv = "Velika sala" },
+                new Sala() { Id = 3, Naziv = "Ultimate sala" }
             );
 
             builder.Entity<Sediste>().HasData(
@@ -147,151 +189,6 @@ namespace Bioskop.Models
                     Opis = "Opis 5"
                 }
             );
-
-            builder.Entity<Korisnik>().HasData(
-                new Korisnik()
-                {
-                    Id = 1,
-                    KorisnickoIme = "Administrator",
-                    Lozinka = "Lozinka",
-                    DatumRegistracije = new DateTime(2021, 11, 21),
-                    Uloga = "Administrator"
-                },
-                new Korisnik()
-                {
-                    Id = 2,
-                    KorisnickoIme = "Korisnik1",
-                    Lozinka = "Lozinka1",
-                    DatumRegistracije = new DateTime(2021, 11, 23),
-                    Uloga = "Korisnik"
-                },
-                new Korisnik()
-                {
-                    Id = 3,
-                    KorisnickoIme = "Korisnik2",
-                    Lozinka = "Lozinka2",
-                    DatumRegistracije = new DateTime(2021, 12, 21),
-                    Uloga = "Korisnik"
-                }
-            );
-
-            builder.Entity<Projekcija>().HasData(
-                new Projekcija()
-                {
-                    Id = 1,
-                    FilmId = 3,
-                    TipProjekcijeId = 1,
-                    SalaId = 2,
-                    VremePrikazivanja = new DateTime(2023, 6, 13, 11, 30, 0),
-                    CenaKarte = 350m,
-                    AdministratorId = 1,
-                },
-                new Projekcija()
-                {
-                    Id = 2,
-                    FilmId = 1,
-                    TipProjekcijeId = 2,
-                    SalaId = 1,
-                    VremePrikazivanja = new DateTime(2023, 6, 7, 10, 45, 0),
-                    CenaKarte = 400m,
-                    AdministratorId = 1,
-                },
-                new Projekcija()
-                {
-                    Id = 3,
-                    FilmId = 5,
-                    TipProjekcijeId = 3,
-                    SalaId = 3,
-                    VremePrikazivanja = new DateTime(2023, 6, 14, 13, 15, 0),
-                    CenaKarte = 550m,
-                    AdministratorId = 1,
-                },
-                new Projekcija()
-                {
-                    Id = 4,
-                    FilmId = 2,
-                    TipProjekcijeId = 2,
-                    SalaId = 1,
-                    VremePrikazivanja = new DateTime(2023, 6, 14, 16, 30, 0),
-                    CenaKarte = 400m,
-                    AdministratorId = 1,
-                },
-                new Projekcija()
-                {
-                    Id = 5,
-                    FilmId = 2,
-                    TipProjekcijeId = 3,
-                    SalaId = 1,
-                    VremePrikazivanja = new DateTime(2023, 6, 14, 18, 45, 0),
-                    CenaKarte = 450m,
-                    AdministratorId = 1,
-                }
-            );
-
-            builder.Entity<Karta>().HasData(
-                new Karta()
-                {
-                    Id = 1,
-                    ProjekcijaId = 1,
-                    SedisteId = 11,
-                    VremeProdaje = new DateTime(2023, 5, 26, 12, 35, 13),
-                    KorisnikId = 2,
-                },
-                new Karta()
-                {
-                    Id = 2,
-                    ProjekcijaId = 5,
-                    SedisteId = 1,
-                    VremeProdaje = new DateTime(2023, 5, 26, 9, 38, 0),
-                    KorisnikId = 3,
-                },
-                new Karta()
-                {
-                    Id = 3,
-                    ProjekcijaId = 2,
-                    SedisteId = 8,
-                    VremeProdaje = new DateTime(2023, 5, 27, 18, 45, 33),
-                    KorisnikId = 3,
-                },
-                new Karta()
-                {
-                    Id = 4,
-                    ProjekcijaId = 4,
-                    SedisteId = 2,
-                    VremeProdaje = new DateTime(2023, 5, 27, 19, 11, 56),
-                    KorisnikId = 2,
-                },
-                new Karta()
-                {
-                    Id = 5,
-                    ProjekcijaId = 1,
-                    SedisteId = 21,
-                    VremeProdaje = new DateTime(2023, 5, 27, 19, 15, 43),
-                    KorisnikId = 3,
-                },
-                new Karta()
-                {
-                    Id = 6,
-                    ProjekcijaId = 4,
-                    SedisteId = 3,
-                    VremeProdaje = new DateTime(2023, 5, 28, 10, 14, 53),
-                    KorisnikId = 2,
-                },
-                new Karta()
-                {
-                    Id = 7,
-                    ProjekcijaId = 3,
-                    SedisteId = 33,
-                    VremeProdaje = new DateTime(2023, 5, 28, 11, 24, 31),
-                    KorisnikId = 3,
-                }
-            );
-
-            builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
-            builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
-            builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
-            builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
-            builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
 
             base.OnModelCreating(builder);
         }

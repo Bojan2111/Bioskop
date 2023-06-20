@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bioskop.Models.Login;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Bioskop.Models
@@ -15,7 +16,7 @@ namespace Bioskop.Models
         [Required]
         public DateTime VremeProdaje { get; set; }
         [Required]
-        public int KorisnikId { get; set; }
-        public Korisnik Korisnik { get; set; }
+        public string KorisnikId { get; set; }
+        public ApplicationUser Korisnik { get; set; }
     }
 }
