@@ -1,5 +1,7 @@
+using Bioskop.Interfaces;
 using Bioskop.Models;
 using Bioskop.Models.Login;
+using Bioskop.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -79,11 +81,13 @@ namespace Bioskop
                         builder.WithOrigins("*").AllowAnyHeader().AllowAnyMethod();
                     });
             });
-            // Uncomment following lines when done creating AutoMapper Profile for DTOs and creating repositories with their interfaces!
-            //services.AddAutoMapper(typeof(ModelNameProfile));
+            
+            services.AddAutoMapper(typeof(KartaProfile));
+            services.AddAutoMapper(typeof(ProjekcijaProfile));
 
-            //services.AddScoped<InterfaceModelNameRepository, ModelNameRepository>();
-            //services.AddScoped<InterfaceOtherModelNameRepository, OtherModelNameRepository>();
+            services.AddScoped<IFilmRepository, FilmRepository>();
+            services.AddScoped<IKartaRepository, KartaRepository>();
+            services.AddScoped<IProjekcijaRepository, ProjekcijaRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

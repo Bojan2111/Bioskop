@@ -1,8 +1,12 @@
-﻿using AutoMapper;
-using Bioskop.Interfaces;
+﻿using Bioskop.Interfaces;
 using Bioskop.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using static System.Net.Mime.MediaTypeNames;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Threading.Tasks;
+using System;
 
 namespace Bioskop.Controllers
 {
@@ -11,19 +15,17 @@ namespace Bioskop.Controllers
     public class FilmoviController : ControllerBase
     {
         private readonly IFilmRepository _filmRepository;
-        private readonly IMapper _mapper;
 
-        public FilmoviController(IFilmRepository filmRepository, IMapper mapper)
+        public FilmoviController(IFilmRepository filmRepository)
         {
             _filmRepository = filmRepository;
-            _mapper = mapper;
         }
 
         [HttpGet]
         [Route("/api/filmovi")]
         public IActionResult GetFirstEntities()
         {
-            return Ok(_filmRepository.GetAll());//.ProjectTo<FilmDTO>(_mapper.ConfigurationProvider).ToList());
+            return Ok(_filmRepository.GetAll());
         }
 
 

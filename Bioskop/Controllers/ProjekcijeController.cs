@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Bioskop.Interfaces;
 using Bioskop.Models;
+using Bioskop.Models.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace Bioskop.Controllers
 {
@@ -23,7 +26,7 @@ namespace Bioskop.Controllers
         [Route("/api/projekcije")]
         public IActionResult GetFirstEntities()
         {
-            return Ok(_projekcijaRepository.GetAll());//.ProjectTo<ProjekcijaDTO>(_mapper.ConfigurationProvider).ToList());
+            return Ok(_projekcijaRepository.GetAll().ProjectTo<ProjekcijaDTO>(_mapper.ConfigurationProvider).ToList());
         }
 
 
